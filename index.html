@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>EPA × MAKAR 前測</title>
+<style>
+:root{--bg:#f7f8fc;--card:#fff;--ink:#1f2937;--muted:#6b7280;--line:#e5e7eb;--brand:#5b67f1;--soft:#eef0ff;--radius:18px;--shadow:0 10px 30px rgba(17,24,39,.08)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","Segoe UI",Arial,sans-serif;line-height:1.6}
+.wrap{max-width:820px;margin:0 auto;padding:28px 16px 80px}
+.hero{background:linear-gradient(135deg,#6673ff,#7d65db);color:white;border-radius:24px;padding:28px 24px;box-shadow:var(--shadow);margin-bottom:18px}
+.hero h1{margin:0 0 8px;font-size:28px}.hero p{margin:0;opacity:.94}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin:14px 0}
+.card h2{font-size:19px;margin:0 0 12px}.small{font-size:13px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:640px){.grid{grid-template-columns:1fr}}
+label{display:block;font-weight:700;margin-bottom:6px}.field{margin:10px 0}
+input,textarea,select{width:100%;border:1px solid #d1d5db;border-radius:12px;padding:12px 13px;font:inherit;background:white;color:var(--ink)}
+textarea{min-height:92px;resize:vertical}
+.rank-list{display:grid;gap:10px;margin-top:10px}
+.rank-row{display:grid;grid-template-columns:72px 1fr;gap:10px;align-items:center;background:#fafafa;border:1px solid var(--line);border-radius:14px;padding:10px}
+.rank-row select{margin:0}
+.tip{background:var(--soft);border:1px solid #d9ddff;border-radius:14px;padding:12px 14px;margin-top:10px;font-size:14px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.btn{border:0;border-radius:12px;padding:12px 18px;font-weight:800;cursor:pointer;font-size:15px}.primary{background:var(--brand);color:#fff}.secondary{background:#fff;border:1px solid var(--line);color:var(--ink)}
+#result{display:none}.result-grid{display:grid;gap:10px}.result-item{border:1px solid var(--line);border-radius:14px;padding:13px;background:#fff}.result-item b{display:block;margin-bottom:3px}
+.badge{display:inline-block;background:var(--soft);color:#454fc7;padding:4px 9px;border-radius:999px;font-size:12px;font-weight:800;margin-bottom:8px}
+@media print{body{background:white}.wrap{max-width:none;padding:0}.hero{box-shadow:none}.card{box-shadow:none;break-inside:avoid}.actions,.no-print{display:none!important}#result{display:block!important}.hero{background:white!important;color:#111!important;border:1px solid #ddd}.hero p{color:#444}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <section class="hero">
+    <h1>EPA × MAKAR 前測</h1>
+    <p>請依照你目前的臨床判斷完成作答。本測驗沒有標準排序答案，重點是呈現你此刻的思考方式。</p>
+  </section>
+
+  <section class="card">
+    <h2>基本資料</h2>
+    <div class="grid">
+      <div class="field"><label for="name">姓名</label><input id="name" autocomplete="name" placeholder="請輸入姓名"></div>
+      <div class="field"><label for="unit">單位</label><input id="unit" placeholder="例如：11B"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <span class="badge">第 1 部分</span>
+    <h2>如果要判斷「這項任務能不能放心交給學員」，你會先看什麼？</h2>
+    <p class="small">請將下列四項依你目前最重視的先後順序排列。1 = 最優先。</p>
+    <div class="rank-list">
+      <div class="rank-row"><select id="r1"><option value="">順位</option><option>1</option><option>2</option><option>3</option><option>4</option></select><div><b>學員目前的實際表現</b><div class="small">是否能完成這項任務、目前需要多少協助。</div></div></div>
+      <div class="rank-row"><select id="r2"><option value="">順位</option><option>1</option><option>2</option><option>3</option><option>4</option></select><div><b>病人與情境的風險</b><div class="small">病況、任務風險與當下環境是否適合放手。</div></div></div>
+      <div class="rank-row"><select id="r3"><option value="">順位</option><option>1</option><option>2</option><option>3</option><option>4</option></select><div><b>學員過去的學習與經驗</b><div class="small">是否曾做過、熟悉程度與先備能力。</div></div></div>
+      <div class="rank-row"><select id="r4"><option value="">順位</option><option>1</option><option>2</option><option>3</option><option>4</option></select><div><b>教師可提供的監督與支援</b><div class="small">教師能否在需要時介入、回應或協助。</div></div></div>
+    </div>
+    <div class="tip">沒有唯一正確排序。這份前測要保留的是你「還沒進入 MAKAR 情境教學前」的原始判斷。</div>
+  </section>
+
+  <section class="card">
+    <span class="badge">第 2 部分</span>
+    <h2>請把你的思考寫出來</h2>
+    <div class="field"><label for="why">1. 為什麼你會這樣排序？</label><textarea id="why" placeholder="請寫下你的理由"></textarea></div>
+    <div class="field"><label for="need">2. 真正決定是否能放手前，你還需要哪些資訊？</label><textarea id="need" placeholder="例如：病況、任務風險、學員近期表現……"></textarea></div>
+    <div class="field"><label for="change">3. 哪些情境會讓你改變原本的排序或判斷？</label><textarea id="change" placeholder="請描述可能改變你判斷的情境"></textarea></div>
+    <div class="field"><label for="stop">4. 什麼情況下你會停止讓學員自行處理，改由教師介入？</label><textarea id="stop" placeholder="請描述你會介入或要求回報的條件"></textarea></div>
+  </section>
+
+  <div class="actions no-print">
+    <button class="btn primary" id="submitBtn">完成前測</button>
+    <button class="btn secondary" type="button" onclick="location.reload()">重新填寫</button>
+  </div>
+
+  <section class="card" id="result">
+    <span class="badge">前測紀錄</span>
+    <h2>EPA × MAKAR 前測結果</h2>
+    <div class="result-grid" id="resultBody"></div>
+    <div class="actions no-print">
+      <button class="btn primary" onclick="window.print()">列印／另存 PDF</button>
+    </div>
+  </section>
+</main>
+<script>
+const rankLabels=[
+  '學員目前的實際表現',
+  '病人與情境的風險',
+  '學員過去的學習與經驗',
+  '教師可提供的監督與支援'
+];
+function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function nl(s){return esc(s).replace(/\n/g,'<br>')}
+document.getElementById('submitBtn').addEventListener('click',()=>{
+  const name=document.getElementById('name').value.trim();
+  const unit=document.getElementById('unit').value.trim();
+  const ranks=[1,2,3,4].map(i=>document.getElementById('r'+i).value);
+  const texts=['why','need','change','stop'].map(id=>document.getElementById(id).value.trim());
+  if(!name||!unit){alert('請先填寫姓名與單位。');return;}
+  if(ranks.some(v=>!v)){alert('請完成四項排序。');return;}
+  if(new Set(ranks).size!==4){alert('四個順位不可重複，請使用 1、2、3、4 各一次。');return;}
+  if(texts.some(v=>!v)){alert('請完成四題文字作答。');return;}
+  const ordered=rankLabels.map((label,i)=>({label,rank:Number(ranks[i])})).sort((a,b)=>a.rank-b.rank);
+  const now=new Date().toLocaleString('zh-TW',{hour12:false});
+  document.getElementById('resultBody').innerHTML=`
+    <div class="result-item"><b>姓名／單位</b>${esc(name)}／${esc(unit)}</div>
+    <div class="result-item"><b>完成時間</b>${esc(now)}</div>
+    <div class="result-item"><b>原始排序</b>${ordered.map(x=>`${x.rank}. ${esc(x.label)}`).join('<br>')}</div>
+    <div class="result-item"><b>為什麼這樣排序？</b>${nl(texts[0])}</div>
+    <div class="result-item"><b>決定是否放手前，還需要哪些資訊？</b>${nl(texts[1])}</div>
+    <div class="result-item"><b>哪些情境會改變原本判斷？</b>${nl(texts[2])}</div>
+    <div class="result-item"><b>何時停止自行處理並由教師介入？</b>${nl(texts[3])}</div>`;
+  document.getElementById('result').style.display='block';
+  document.getElementById('result').scrollIntoView({behavior:'smooth'});
+});
+</script>
+</body>
+</html>
