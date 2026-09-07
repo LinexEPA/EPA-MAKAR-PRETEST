@@ -14,9 +14,9 @@
 <section class="header"><div class="tag">前測</div><h1>給藥任務前測</h1><p class="subtitle">從臨床線索開始，依照你現在最真實的判斷完成排序。前測不提供標準答案。</p></section>
 <section id="startArea" class="card">
 <div class="notice">個人作答｜四個情境皆需完成排序。藥物仿單與培養報告可依你的需要自行查看。</div>
-<label>全名</label><input id="name" style="width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;font:inherit" placeholder="請輸入完整姓名">
-<label style="display:block;margin-top:12px">單位</label><input id="unit" style="width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;font:inherit" placeholder="例如：11B">
-<button class="btn" style="width:100%;margin-top:16px" onclick="start()">開始作答 →</button><div class="privacy">本頁為獨立測驗頁，不會將姓名、單位或作答傳送到其他網站或服務。</div>
+<label>全名</label><input id="fullName" style="width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;font:inherit" placeholder="請輸入完整姓名">
+<label style="display:block;margin-top:12px">單位</label><input id="unitInput" style="width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;font:inherit" placeholder="例如：11B">
+<button class="btn" style="width:100%;margin-top:16px" onclick="startAssessment()">開始作答 →</button><div class="privacy">本頁為獨立測驗頁，不會將姓名、單位或作答傳送到其他網站或服務。</div>
 </section>
 <section id="questionArea" class="hidden">
 <div class="card"><b id="progress"></b></div>
@@ -43,13 +43,20 @@ const Q=[
 {id:'q4',title:'題目 4｜決定與採取行動',stem:'病人原施打 Clindamycin，醫囑改用 Cefepime。請依照重要性排序你的護理行動。',o:['查看培養與藥敏報告，確認更換抗生素可能原因。','確認病人藥物過敏史，特別注意 Vancomycin HCl 曾出現 Skin rash。','依醫囑準備 Cefepime，並注意抗生素給藥時間與給藥安全。','追蹤感染指標、生命徵象與抗生素治療反應，列入交班重點。']}
 ];
 let qi=0,ans={};
-function renderDrugs(){drugGrid.innerHTML=DRUGS.map(d=>`<button class="drug" onclick="openDrug('${d.id}')">${d.name}<small>${d.sub}</small></button>`).join('')}
-function openDrug(id){const d=DRUGS.find(x=>x.id===id);drugTitle.textContent=d.name+'｜仿單摘要';drugBody.innerHTML=d.s.map(x=>`<div class="section"><b>${x[0]}</b><br>${x[1]}</div>`).join('');drugModal.style.display='flex'}
-function closeModal(id){document.getElementById(id).style.display='none'}
-function openReport(){reportModal.style.display='flex'}
-function start(){if(!name.value.trim()||!unit.value.trim()){alert('請先輸入完整姓名與單位');return}Q.forEach(q=>ans[q.id]=[]);startArea.classList.add('hidden');questionArea.classList.remove('hidden');render()}
-function render(){const q=Q[qi],a=ans[q.id];progress.textContent=`前測｜第 ${qi+1} 題 / 共 ${Q.length} 題`;qtitle.textContent=q.title;stem.textContent=q.stem;reportBox.classList.toggle('hidden',q.id!=='q4');selected.innerHTML=a.length?a.map((idx,i)=>`<div class="row"><strong>${i+1}. ${q.o[idx]}</strong><button class="mini" onclick="up(${i})">↑</button><button class="mini" onclick="down(${i})">↓</button><button class="mini" onclick="removeAt(${i})">移除</button></div>`).join(''):'<div class="hint">尚未排序，請從下方點選項目加入。</div>';options.innerHTML=q.o.map((t,i)=>a.includes(i)?'':`<button class="option" onclick="pick(${i})">${t}<div class="small">點選加入排序</div></button>`).join('');nextBtn.textContent=qi===Q.length-1?'送出前測':'下一題'}
-function pick(i){const a=ans[Q[qi].id];if(!a.includes(i)){a.push(i);render()}}function up(i){const a=ans[Q[qi].id];if(i>0){[a[i-1],a[i]]=[a[i],a[i-1]];render()}}function down(i){const a=ans[Q[qi].id];if(i<a.length-1){[a[i+1],a[i]]=[a[i],a[i+1]];render()}}function removeAt(i){ans[Q[qi].id].splice(i,1);render()}function clearQ(){if(confirm('確定要清除此題排序嗎？')){ans[Q[qi].id]=[];render()}}function prev(){if(qi>0){qi--;render();scrollTo(0,0)}}function next(){if(ans[Q[qi].id].length!==4){alert('請先完成這一題的排序');return}if(qi<Q.length-1){qi++;render();scrollTo(0,0)}else{questionArea.classList.add('hidden');done.classList.remove('hidden');scrollTo(0,0)}}
+const el=id=>document.getElementById(id);
+function renderDrugs(){el('drugGrid').innerHTML=DRUGS.map(d=>`<button class="drug" onclick="openDrug('${d.id}')">${d.name}<small>${d.sub}</small></button>`).join('')}
+function openDrug(id){const d=DRUGS.find(x=>x.id===id);el('drugTitle').textContent=d.name+'｜仿單摘要';el('drugBody').innerHTML=d.s.map(x=>`<div class="section"><b>${x[0]}</b><br>${x[1]}</div>`).join('');el('drugModal').style.display='flex'}
+function closeModal(id){el(id).style.display='none'}
+function openReport(){el('reportModal').style.display='flex'}
+function startAssessment(){const fullName=el('fullName').value.trim();const unit=el('unitInput').value.trim();if(!fullName||!unit){alert('請先輸入完整姓名與單位');return}Q.forEach(q=>ans[q.id]=[]);el('startArea').classList.add('hidden');el('questionArea').classList.remove('hidden');render()}
+function render(){const q=Q[qi],a=ans[q.id];el('progress').textContent=`前測｜第 ${qi+1} 題 / 共 ${Q.length} 題`;el('qtitle').textContent=q.title;el('stem').textContent=q.stem;el('reportBox').classList.toggle('hidden',q.id!=='q4');el('selected').innerHTML=a.length?a.map((idx,i)=>`<div class="row"><strong>${i+1}. ${q.o[idx]}</strong><button class="mini" onclick="up(${i})">↑</button><button class="mini" onclick="down(${i})">↓</button><button class="mini" onclick="removeAt(${i})">移除</button></div>`).join(''):'<div class="hint">尚未排序，請從下方點選項目加入。</div>';el('options').innerHTML=q.o.map((t,i)=>a.includes(i)?'':`<button class="option" onclick="pick(${i})">${t}<div class="small">點選加入排序</div></button>`).join('');el('nextBtn').textContent=qi===Q.length-1?'送出前測':'下一題'}
+function pick(i){const a=ans[Q[qi].id];if(!a.includes(i)){a.push(i);render()}}
+function up(i){const a=ans[Q[qi].id];if(i>0){[a[i-1],a[i]]=[a[i],a[i-1]];render()}}
+function down(i){const a=ans[Q[qi].id];if(i<a.length-1){[a[i+1],a[i]]=[a[i],a[i+1]];render()}}
+function removeAt(i){ans[Q[qi].id].splice(i,1);render()}
+function clearQ(){if(confirm('確定要清除此題排序嗎？')){ans[Q[qi].id]=[];render()}}
+function prev(){if(qi>0){qi--;render();window.scrollTo(0,0)}}
+function next(){if(ans[Q[qi].id].length!==4){alert('請先完成這一題的排序');return}if(qi<Q.length-1){qi++;render();window.scrollTo(0,0)}else{el('questionArea').classList.add('hidden');el('done').classList.remove('hidden');window.scrollTo(0,0)}}
 renderDrugs();
 </script>
 </body></html>
